@@ -9,6 +9,9 @@ app.listen(8000, () => {
 })
 
 const data = require('./app-data');
+const cors = require('cors');
+app.use(cors());
+
 
 
 app.get('/app', (req, res) => {
@@ -31,14 +34,17 @@ app.get('/app', (req, res) => {
           .send('Select a valid genre')
  }
 
+ 
+
  if (sort === 'rating') {
   
  }
 
  if (sort ==='app') {
-
+filteredResults = filteredResults.filter(app =>{
+  return app.title.includes(app)
+})
  }
-
-
+res.json(data);
 
 })
