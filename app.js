@@ -4,7 +4,15 @@ const morgan = require('morgan');
 const app = express();
 app.use(morgan('dev'));
 
-const data = require('app-data');
+const cors = require('cors');
+app.use(cors());
+
+
+const data = require('./app-data');
+
+app.listen(8000, () => {
+  console.log("Express server is listening on port 8000!");
+});
 
 
 app.get('/app', (req, res) => {
@@ -27,15 +35,18 @@ app.get('/app', (req, res) => {
           .send('Select a valid genre')
  }
 
+ 
+
  if (sort === 'rating') {
 
  }
 
  if (sort ==='app') {
-
+filteredResults = filteredResults.filter(app =>{
+  return app.title.includes(app)
+})
  }
-
-
+res.json(data);
 
 
 })
