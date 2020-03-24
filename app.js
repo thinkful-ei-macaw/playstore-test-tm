@@ -4,7 +4,11 @@ const morgan = require('morgan');
 const app = express();
 app.use(morgan('dev'));
 
-const data = require('app-data');
+app.listen(8000, () => {
+  console.log('Express server is listening on port 8000....wooo hooo!')
+})
+
+const data = require('./app-data');
 
 
 app.get('/app', (req, res) => {
@@ -28,13 +32,12 @@ app.get('/app', (req, res) => {
  }
 
  if (sort === 'rating') {
-
+  
  }
 
  if (sort ==='app') {
 
  }
-
 
 
 
