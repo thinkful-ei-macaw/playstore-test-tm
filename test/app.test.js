@@ -5,6 +5,7 @@ const app = require('../app');
 describe('app', () => {
 
   describe('GET /app', () => {
+    
     it('returns status 200, with list of apps', () => {
       return request(app)
         .get('/app')
@@ -40,8 +41,16 @@ describe('app', () => {
             expect(sorted).to.be.true;
           });
       });
+      
     });
-  
+
+    it('returns 400 if sort value is not app or rating', () => {
+      return request(app)
+        .get('/app')
+        .query( { sort: 'invalid'})
+        .expect(400, 'Sort by rating or app');
+    });
+      
     it('returns array of apps filtered by genre' , () => {
       return request(app)
         .get('/app')
@@ -51,34 +60,16 @@ describe('app', () => {
           expect(res.body).to.be.an('array');
           let i = 0, filtered = true;
           while(filtered && i < res.body.length) {
-            filtered = filtered && res.body[i]['Genres'].includes('Puzzle')
+            filtered = filtered && res.body[i]['Genres'].includes('Puzzle');
             i++;
           }
           expect(filtered).to.be.true;
-        })
+        });
     });
+
   });
 
   describe('GET /frequency', () => {
-    
-    // Write an endpoint handler function GET /frequency that accepts a String s. Count the frequency of occurrence of each character in the String, the total number of distinct characters, the average frequency, and the character with the highest frequency. Return an object in the format:
-
-    // {
-    //   count: 2,
-    //   average: 5,
-    //   highest: 'a',
-    //   'a': 6,
-    //   'b': 4
-    // }
-
-    // Where the input may have been 'aaBBAAbbaa'. Throw an error if the String is undefined. If more than one characters tie for highest frequency return the one closest to the beginning of the alphabet.
-
-    // {
-    //  'h': 1,
-    //  'e': 1,
-    //  'l': 2,
-    //  'o': 1
-    // }
 
     it('returns status 200 with properly formatted object', () => {
       return request(app)
@@ -93,9 +84,12 @@ describe('app', () => {
         });
     });
 
-    it('returns 400 if no `s` parameter is provided');
-    it('returns 400 when given non-string value as `s` parameter');
+    it('returns 400 if no `s` parameter is provided', () => {
+      return request(app)
+        .get('/frequency')
+        .expect(400, 'Invalid request');
+    });
 
   });
 
-})
+});
