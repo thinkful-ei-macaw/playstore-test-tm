@@ -12,38 +12,42 @@ app.use(cors());
 
 
 app.get('/app', (req, res) => {
- const { sort, genre } = req.query;
+  const { sort, genre } = req.query;
 
- if (!sort && !genre) {
-   return res.json(data)
- }
+  let results = [...data];
 
- if (sort !== 'rating' && sort !== 'app') {
-   return res
-          .status(400)
-          .send('Sort by rating or app')
- }
+  const validSorts = ['rating', 'app'];
+  if (sort){
+    if (!validSorts.includes(sort.toLowerCase())) {
+      return res
+        .status(400)
+        .send('Sort by rating or app');
+    } else {
+      let field = sort[0].toUpperCase() + sort.slice(1).toLowerCase();
+      results.sort((a, b) => {
+        if (field === 'Rating') {
+          if (a[field] > b[field]) return -1;
+        } else {
+          if (a[field] < b[field]) return -1;
+        }
+        return 1;
+      });
+    }
+  }
 
- const genreValues = ['Action', 'Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card']
- if (!genreValues.includes(genre)) {
-   return res 
-          .status(400)
-          .send('Select a valid genre')
- }
+  const validGenres = ['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card'];
+  if (genre){
+    if (!validGenres.includes(genre.toLowerCase())) {
+      return res
+        .status(400)
+        .send('Select a valid genre');
+    } else {
+      results = results.filter(result => result['Genres'].toLowerCase().includes(genre.toLowerCase()));
+    }
+  }
 
- 
+  return res.json(results);
 
- if (sort === 'rating') {
-  
- }
+});
 
- if (sort ==='app') {
-filteredResults = filteredResults.filter(app =>{
-  return app.title.includes(app)
-})
- }
-res.json(data);
-
-})
-
-module.exports = app
+module.exports = app;
