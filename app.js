@@ -4,9 +4,6 @@ const morgan = require('morgan');
 const app = express();
 app.use(morgan('dev'));
 
-app.listen(8000, () => {
-  console.log('Express server is listening on port 8000....wooo hooo!')
-})
 
 const data = require('./app-data');
 const cors = require('cors');
@@ -48,3 +45,5 @@ filteredResults = filteredResults.filter(app =>{
 res.json(data);
 
 })
+
+module.exports = app
