@@ -40,5 +40,19 @@ describe('GET /app', () => {
     });
   });
 
-  it('returns array of apps filtered by genre');
+  it('returns array of apps filtered by genre' , () => {
+    return request(app)
+      .get('/app')
+      .query( { genre: 'Puzzle'})
+      .expect(200)
+      .then( res => {
+        expect(res.body).to.be.an('array');
+        let i = 0, filtered = true;
+        while(filtered && i < res.body.length) {
+          filtered = filtered && res.body[i]['Genres'].includes('Puzzle')
+          i++;
+        }
+        expect(filtered).to.be.true;
+      })
+  });
 });
